@@ -1,0 +1,76 @@
+{
+  "cities": [
+    {
+      "slug": "mumbai",
+      "name": "Mumbai",
+      "entities": [
+        {
+          "slug": "nehru-science-centre-mumbai",
+          "name": "Nehru Science Centre",
+          "fullName": "Nehru Science Centre, Mumbai",
+          "photo": "/public/assets/buyers/Nehru%20science%20center%20logo.jpg",
+          "buyers": [
+            {
+              "key": "hd",
+              "label": "Highway Delite",
+              "status": "live",
+              "logo": "/public/assets/buyers/highway-delite.png",
+              "url": "https://experiences.highwaydelite.com/mumbai/culture-and-heritage/nehru-science-centre-mumbai"
+            },
+            {
+              "key": "staybook",
+              "label": "Staybook",
+              "status": "live",
+              "logo": "/public/assets/buyers/staybook-logo.png",
+              "url": "https://staybook.in/activities/nehru-science-centre-mumbai"
+            },
+
+            {
+              "key": "oneticket",
+              "label": "Oneticket",
+              "status": "live",
+              "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
+              "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019ebb57-e18e-7618-b38c-a1f7cfad76ce"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "bangalore",
+      "name": "Bangalore",
+      "entities": [
+        {
+          "slug": "visvesvaraya-industrial-technological-museum-bangalore",
+          "name": "Visvesvaraya Industrial and Technological Museum",
+          "fullName": "Visvesvaraya Industrial and Technological Museum, Bangalore",
+          "photo": "/public/assets/buyers/Visvesvaraya%20Industrial%20and%20technological%20museum%20logo.jpg",
+          "buyers": [
+            {
+              "key": "hd",
+              "label": "Highway Delite",
+              "status": "live",
+              "logo": "/public/assets/buyers/highway-delite.png",
+              "url": "https://experiences.highwaydelite.com/bangalore/culture-and-heritage/visvesvaraya-industrial-technological-museum-bangalore"
+            },
+            {
+              "key": "staybook",
+              "label": "Staybook",
+              "status": "live",
+              "logo": "/public/assets/buyers/staybook-logo.png",
+              "url": "https://staybook.in/activities/visvesvaraya-industrial-museum-bangalore"
+            },
+
+            {
+              "key": "oneticket",
+              "label": "Oneticket",
+              "status": "live",
+              "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
+              "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019e96f1-e59a-7801-b3d9-76885eb546a2"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

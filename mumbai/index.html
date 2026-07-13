@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1c75bc" />
+    <meta
+      name="description"
+      content="Discover ONDC buyer apps for top experiences and attractions in Mumbai."
+    />
+    <meta property="og:title" content="Experience Discover — Mumbai | ONDC" />
+    <meta
+      property="og:description"
+      content="Discover ONDC buyer apps for top experiences and attractions in Mumbai."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/public/ondc-logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    />
+    <title>Experience Discover — Mumbai | ONDC</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-17W29WN58K"
+    ></script>
+    <script src="/public/app.js"></script>
+
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          system-ui, sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        color: #1e293b;
+        min-height: 100dvh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 32px 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* ── Layout ── */
+      .app-root {
+        width: 100%;
+        max-width: 430px;
+        min-height: calc(100dvh - 64px);
+        background: #f4f6f9;
+        border-radius: 40px;
+        overflow: clip;
+        box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.06),
+          0 24px 80px rgba(0, 0, 0, 0.55);
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── Navbar ── */
+      .ondc-navbar {
+        width: 100%;
+        background: #fff;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .ondc-navbar-inner {
+        max-width: 580px;
+        margin: 0 auto;
+        height: 64px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .ondc-logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        flex-shrink: 0;
+      }
+
+      .ondc-logo-img {
+        height: 44px;
+        width: auto;
+        display: block;
+      }
+
+      .ondc-navbar-product {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #64748b;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        border-left: 1.5px solid #e2e8f0;
+        padding-left: 14px;
+      }
+
+      /* ── Hero header ── */
+      .header {
+        width: 100%;
+        background: linear-gradient(
+          140deg,
+          #1c75bc 0%,
+          #0e9cd8 60%,
+          #00aeef 100%
+        );
+        padding: 20px 16px 20px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .header-hero {
+        max-width: 580px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        text-align: center;
+      }
+
+      .header-logo {
+        width: 108px;
+        height: 108px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .header-logo.has-photo {
+        width: auto;
+        height: 60px;
+        max-width: 220px;
+      }
+
+      .experience-icon-svg {
+        width: 60px;
+        height: 60px;
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+        stroke: #fff;
+      }
+
+      .venue-photo {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 12px;
+        border: 3px solid rgba(255, 255, 255, 0.55);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      }
+
+      .header-text {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .header-title {
+        font-size: 1.65rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #fff;
+        line-height: 1.15;
+      }
+
+      .header-subtitle {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 400;
+        line-height: 1.5;
+      }
+
+      /* ── Main content area ── */
+      .app-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 28px 16px calc(32px + env(safe-area-inset-bottom, 0px));
+      }
+
+      /* ── Seller / entity / city list ── */
+      .seller-list {
+        list-style: none;
+        padding: 10px 0;
+        width: 100%;
+        max-width: 350px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .seller-item a {
+        display: flex;
+        align-items: center;
+        padding: 10px 14px;
+        min-height: 48px;
+        border-radius: 28px;
+        text-decoration: none;
+        color: #0d2137;
+        font-weight: 600;
+        font-size: 0.97rem;
+        border: 1.5px solid #e8f0f8;
+        background: #fafbff;
+        transition: background 0.15s, border-color 0.15s, box-shadow 0.15s,
+          transform 0.1s;
+      }
+
+      .seller-item a:hover {
+        background: #eef4ff;
+        border-color: #bad3f5;
+        box-shadow: 0 4px 16px rgba(28, 117, 188, 0.13);
+        transform: translateY(-1px);
+      }
+
+      .seller-item a:active {
+        transform: translateY(0);
+        background: #deeaff;
+      }
+
+      .seller-name {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .seller-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1c75bc, #00aeef);
+        flex-shrink: 0;
+      }
+
+      /* ── Coming soon (disabled) items ── */
+      .seller-item--disabled {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 14px;
+        min-height: 48px;
+        border-radius: 28px;
+        border: 1.5px dashed #dbe4ee;
+        background: #eef1f5;
+        color: #94a3b8;
+        font-weight: 600;
+        font-size: 0.97rem;
+        cursor: default;
+      }
+
+      .seller-dot--soon {
+        background: #cbd5e1;
+      }
+
+      .seller-soon-badge {
+        flex-shrink: 0;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: #94a3b8;
+        background: #e2e8f0;
+        padding: 3px 10px;
+        border-radius: 999px;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+
+      /* ── Status (loading / error) ── */
+      .status-wrap {
+        width: 100%;
+        max-width: 320px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 40px 16px;
+        text-align: center;
+      }
+
+      .status-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0d2137;
+      }
+
+      .status-body {
+        font-size: 0.85rem;
+        color: #6b7280;
+        line-height: 1.6;
+        white-space: pre-line;
+      }
+
+      /* ── Footer ── */
+      .app-footer {
+        background: #0d2137;
+        padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+      }
+
+      .app-footer-inner {
+        max-width: 580px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 0.73rem;
+        color: rgba(255, 255, 255, 0.5);
+        letter-spacing: 0.025em;
+        text-align: center;
+      }
+
+      .app-footer-brand {
+        color: #00aeef;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .app-footer-sep {
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      /* ── Responsive ── */
+      @media (min-width: 640px) {
+        .ondc-navbar-inner {
+          padding: 0 24px;
+        }
+
+        .header {
+          padding: 48px 24px 40px;
+        }
+
+        .header-logo {
+          width: 144px;
+          height: 124px;
+        }
+
+        .header-logo.has-photo {
+          height: 72px;
+          max-width: 260px;
+        }
+
+        .experience-icon-svg {
+          width: 72px;
+          height: 72px;
+        }
+
+        .header-title {
+          font-size: 1.9rem;
+        }
+
+        .app-content {
+          padding: 36px 24px 48px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        body {
+          padding: 0;
+          background: #f4f6f9;
+          display: block;
+        }
+        .app-root {
+          max-width: 100%;
+          min-height: 100dvh;
+          border-radius: 0;
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body data-city="mumbai">
+    <div class="app-root">
+      <!-- Navbar -->
+      <nav class="ondc-navbar" aria-label="ONDC">
+        <div class="ondc-navbar-inner">
+          <a
+            class="ondc-logo"
+            href="https://ondc.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="ONDC – Open Network for Digital Commerce"
+          >
+            <img
+              src="/public/ondc-logo.svg"
+              alt="ONDC"
+              class="ondc-logo-img"
+              height="34"
+            />
+          </a>
+          <span class="ondc-navbar-product">Experience Discover</span>
+        </div>
+      </nav>
+
+      <!-- Hero header -->
+      <header class="header">
+        <div class="header-hero">
+          <div class="header-logo" id="header-logo">
+            <svg
+              class="experience-icon-svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+              />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          </div>
+          <div class="header-text">
+            <h1 class="header-title" id="page-title">Mumbai</h1>
+            <p class="header-subtitle">
+              Beat the queue, entry tickets in a jiffy
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dynamic content, rendered from data/entities.json by public/app.js -->
+      <main class="app-content" id="main-content">
+        <div class="status-wrap">
+          <p class="status-body">Loading experiences…</p>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="app-footer">
+        <div class="app-footer-inner">
+          <span class="app-footer-brand">Powered by ONDC</span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
