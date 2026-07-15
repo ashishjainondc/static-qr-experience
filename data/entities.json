@@ -27,6 +27,12 @@
               "status": "live",
               "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
               "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019ebb57-e18e-7618-b38c-a1f7cfad76ce"
+            },
+            {
+              "label": "Bino",
+              "status": "live",
+              "logo": "/public/assets/buyers/bino.jpg",
+              "url": "https://b.bino.bot/q/rz-nehru"
             }
           ]
         }
@@ -59,6 +65,12 @@
               "status": "live",
               "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
               "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019e96f1-e59a-7801-b3d9-76885eb546a2"
+            },
+            {
+              "label": "Bino",
+              "status": "live",
+              "logo": "/public/assets/buyers/bino.jpg",
+              "url": "https://b.bino.bot/q/rz-vitm"
             }
           ]
         }
