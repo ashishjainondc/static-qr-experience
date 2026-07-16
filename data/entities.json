@@ -11,6 +11,12 @@
           "photo": "/public/assets/buyers/Nehru%20science%20center%20logo.jpg",
           "buyers": [
             {
+              "label": "Oneticket",
+              "status": "live",
+              "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
+              "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019ebb57-e18e-7618-b38c-a1f7cfad76ce"
+            },
+            {
               "label": "Highway Delite",
               "status": "live",
               "logo": "/public/assets/buyers/highway-delite.png",
@@ -22,12 +28,7 @@
               "logo": "/public/assets/buyers/staybook-logo.png",
               "url": "https://staybook.in/activities/nehru-science-centre-mumbai"
             },
-            {
-              "label": "Oneticket",
-              "status": "live",
-              "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
-              "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019ebb57-e18e-7618-b38c-a1f7cfad76ce"
-            },
+
             {
               "label": "Bino",
               "status": "live",
@@ -49,6 +50,12 @@
           "photo": "/public/assets/buyers/Visvesvaraya%20Industrial%20and%20technological%20museum%20logo.jpg",
           "buyers": [
             {
+              "label": "Oneticket",
+              "status": "live",
+              "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
+              "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019e96f1-e59a-7801-b3d9-76885eb546a2"
+            },
+            {
               "label": "Highway Delite",
               "status": "live",
               "logo": "/public/assets/buyers/highway-delite.png",
@@ -61,16 +68,41 @@
               "url": "https://staybook.in/activities/visvesvaraya-industrial-museum-bangalore"
             },
             {
+              "label": "Bino",
+              "status": "live",
+              "logo": "/public/assets/buyers/bino.jpg",
+              "url": "https://b.bino.bot/q/rz-vitm"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "kolkata",
+      "name": "Kolkata",
+      "entities": [
+        {
+          "slug": "birla-industrial-and-technological-museum-kolkata",
+          "name": "Birla Industrial & Technological Museum",
+          "title": "Get Birla Industrial & Technological Museum tickets via ONDC",
+          "buyers": [
+            {
               "label": "Oneticket",
               "status": "live",
               "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
-              "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019e96f1-e59a-7801-b3d9-76885eb546a2"
+              "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019da9fc-fc1e-7bf7-a501-e3efaf76d70d"
+            },
+            {
+              "label": "Highway Delite",
+              "status": "live",
+              "logo": "/public/assets/buyers/highway-delite.png",
+              "url": "https://experiences.highwaydelite.com/kolkata/culture-and-heritage/birla-industrial-and-technological-museum"
             },
             {
               "label": "Bino",
               "status": "live",
               "logo": "/public/assets/buyers/bino.jpg",
-              "url": "https://b.bino.bot/q/rz-vitm"
+              "url": "https://b.bino.bot/q/rz-bitm"
             }
           ]
         }
