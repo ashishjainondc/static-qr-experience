@@ -108,6 +108,38 @@
           ]
         }
       ]
+    },
+    {
+      "slug": "delhi",
+      "name": "Delhi",
+      "entities": [
+        {
+          "slug": "national-gallery-of-modern-art-delhi",
+          "name": "National Gallery of Modern Art",
+          "title": "Get National Gallery of Modern Art tickets via ONDC",
+          "photo": "/public/assets/buyers/National%20Gallery%20Of%20Modern%20Art%20logo.png",
+          "buyers": [
+            {
+              "label": "Highway Delite",
+              "status": "live",
+              "logo": "/public/assets/buyers/highway-delite.png",
+              "url": "https://experiences.highwaydelite.com/new-delhi/culture-and-heritage/national-gallery-of-modern-art"
+            },
+            {
+              "label": "Staybook",
+              "status": "live",
+              "logo": "/public/assets/buyers/staybook-logo.png",
+              "url": "https://staybook.in/activities/national-gallery-of-modern-art-delhi"
+            },
+            {
+              "label": "Bino",
+              "status": "live",
+              "logo": "/public/assets/buyers/bino.jpg",
+              "url": "https://b.bino.bot/q/rz-ngma-delhi"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
