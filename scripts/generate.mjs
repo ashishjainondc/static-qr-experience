@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Generate static HTML pages from data/entities.json into public/.
 // Generic — copy scripts/ (this file + templates/) to any project; the only
-// thing that changes per project is data/entities.json.
+// thing that changes per project is data/entities.json..
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -35,13 +35,17 @@ function readTemplate(name) {
 }
 
 function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  })[c]);
+  return String(value).replace(
+    /[&<>"']/g,
+    (c) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      }[c])
+  );
 }
 
 function fill(template, vars) {
@@ -89,14 +93,20 @@ function validate(data) {
   const groupSlugs = new Set();
   for (const group of data.groups || []) {
     if (!group.slug) errors.push("group missing slug");
-    else if (groupSlugs.has(group.slug)) errors.push("duplicate group slug: " + group.slug);
+    else if (groupSlugs.has(group.slug))
+      errors.push("duplicate group slug: " + group.slug);
     else if (RESERVED_PUBLIC_DIRS.has(group.slug)) {
-      errors.push("group slug conflicts with reserved public/ folder: " + group.slug);
+      errors.push(
+        "group slug conflicts with reserved public/ folder: " + group.slug
+      );
     } else groupSlugs.add(group.slug);
 
-    if (!group.name) errors.push("group " + (group.slug || "?") + " missing name");
+    if (!group.name)
+      errors.push("group " + (group.slug || "?") + " missing name");
     if (!Array.isArray(group.entities)) {
-      errors.push("group " + (group.slug || "?") + " entities must be an array");
+      errors.push(
+        "group " + (group.slug || "?") + " entities must be an array"
+      );
       continue;
     }
 
@@ -104,7 +114,8 @@ function validate(data) {
     for (const entity of group.entities) {
       const label = (group.slug || "?") + "/" + (entity.slug || "?");
       if (!entity.slug) errors.push("entity missing slug under " + group.slug);
-      else if (entitySlugs.has(entity.slug)) errors.push("duplicate entity slug: " + label);
+      else if (entitySlugs.has(entity.slug))
+        errors.push("duplicate entity slug: " + label);
       else entitySlugs.add(entity.slug);
 
       if (!entity.name) errors.push("entity " + label + " missing name");
@@ -123,13 +134,33 @@ function validate(data) {
       for (const buyer of entity.buyers) {
         if (!buyer.label) errors.push("buyer missing label under " + label);
         if (!VALID_STATUSES.has(buyer.status)) {
-          errors.push("invalid status '" + buyer.status + "' under " + label + " (" + buyer.label + ")");
+          errors.push(
+            "invalid status '" +
+              buyer.status +
+              "' under " +
+              label +
+              " (" +
+              buyer.label +
+              ")"
+          );
         }
         if (buyer.status === "live" && !buyer.url) {
-          errors.push("live buyer '" + buyer.label + "' under " + label + " needs url");
+          errors.push(
+            "live buyer '" + buyer.label + "' under " + label + " needs url"
+          );
         }
-        if (buyer.status === "live" && buyer.url && !isValidHttpsUrl(buyer.url)) {
-          errors.push("live buyer '" + buyer.label + "' under " + label + " needs an https url");
+        if (
+          buyer.status === "live" &&
+          buyer.url &&
+          !isValidHttpsUrl(buyer.url)
+        ) {
+          errors.push(
+            "live buyer '" +
+              buyer.label +
+              "' under " +
+              label +
+              " needs an https url"
+          );
         }
         const logoPath = localAssetPath(site.basePath, buyer.logo);
         if (logoPath && !fs.existsSync(logoPath)) {
@@ -155,7 +186,10 @@ function removeStale(data) {
 
   const expectedGroups = new Set(data.groups.map((g) => g.slug));
   const expectedEntities = new Map(
-    data.groups.map((g) => [g.slug, new Set((g.entities || []).map((e) => e.slug))])
+    data.groups.map((g) => [
+      g.slug,
+      new Set((g.entities || []).map((e) => e.slug)),
+    ])
   );
 
   for (const entry of fs.readdirSync(PUBLIC_DIR, { withFileTypes: true })) {
@@ -173,8 +207,17 @@ function removeStale(data) {
     for (const child of fs.readdirSync(groupDir, { withFileTypes: true })) {
       if (!child.isDirectory()) continue;
       if (!keep.has(child.name)) {
-        fs.rmSync(path.join(groupDir, child.name), { recursive: true, force: true });
-        console.log("removed stale entity folder: public/" + entry.name + "/" + child.name + "/");
+        fs.rmSync(path.join(groupDir, child.name), {
+          recursive: true,
+          force: true,
+        });
+        console.log(
+          "removed stale entity folder: public/" +
+            entry.name +
+            "/" +
+            child.name +
+            "/"
+        );
       }
     }
   }
@@ -195,7 +238,10 @@ function generate(data) {
   const groupTpl = readTemplate("group.html");
   const entityTpl = readTemplate("entity.html");
 
-  writeFile(path.join(PUBLIC_DIR, "index.html"), fill(rootTpl, templateVars(site)));
+  writeFile(
+    path.join(PUBLIC_DIR, "index.html"),
+    fill(rootTpl, templateVars(site))
+  );
   console.log("wrote public/index.html");
 
   for (const group of data.groups) {
@@ -221,7 +267,9 @@ function generate(data) {
           ENTITY_TITLE: entity.title,
         })
       );
-      console.log("wrote public/" + group.slug + "/" + entity.slug + "/index.html");
+      console.log(
+        "wrote public/" + group.slug + "/" + entity.slug + "/index.html"
+      );
     }
   }
 }
