@@ -3,29 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Book Tickets — Nehru Science Centre, Mumbai | ONDC</title>
+    <title>Book Tickets — {{ENTITY_NAME}}, {{GROUP_NAME}} | {{ORG_NAME}}</title>
     <meta
       name="description"
-      content="Book Nehru Science Centre, Mumbai tickets from an authorised ONDC buyer app."
+      content="Book {{ENTITY_NAME}}, {{GROUP_NAME}} tickets from an authorised {{ORG_NAME}} buyer app."
     />
-    <link rel="icon" type="image/png" href="/static-qr-experience/public/assets/favicon.png" />
+    <link rel="icon" type="image/png" href="{{BASE_PATH}}/public/images/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static-qr-experience/public/entity.css" />
+    <link rel="stylesheet" href="{{BASE_PATH}}/public/css/entity.css" />
 
     <!-- Google tag (gtag.js) -->
     <script
       async
-      src="https://www.googletagmanager.com/gtag/js?id=G-X9LS4KMKBC"
+      src="https://www.googletagmanager.com/gtag/js?id={{GA_ID}}"
     ></script>
-    <script src="/static-qr-experience/public/app.js" defer></script>
+    <script src="{{BASE_PATH}}/public/js/app.js" defer></script>
   </head>
 
-  <body data-city="mumbai" data-entity="nehru-science-centre-mumbai">
+  <body data-group="{{GROUP_SLUG}}" data-entity="{{ENTITY_SLUG}}">
     <div class="app-root">
       <div id="navbar-slot"></div>
 
@@ -35,7 +35,7 @@
           <div class="header-logo" id="header-logo"></div>
           <div class="header-text">
             <h1 class="header-title" id="page-title">
-              Get Nehru Science Centre Tickets via ONDC
+              {{ENTITY_TITLE}}
             </h1>
             <p class="header-subtitle">
               Beat the queue, entry tickets in a jiffy
@@ -44,7 +44,7 @@
         </div>
       </header>
 
-      <!-- Dynamic content, rendered from data/entities.json by public/app.js -->
+      <!-- Dynamic content, rendered from data/entities.json by public/js/app.js -->
       <main class="app-content" id="main-content">
         <div class="status-wrap">
           <p class="status-body">Loading buyer apps…</p>

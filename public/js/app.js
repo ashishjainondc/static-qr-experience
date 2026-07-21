@@ -16,7 +16,7 @@
     '<div class="ondc-navbar-inner">' +
     '<a class="ondc-logo" href="https://ondc.org" target="_blank" rel="noopener noreferrer" ' +
     'aria-label="ONDC – Open Network for Digital Commerce">' +
-    '<img src="/static-qr-experience/public/ondc-logo.svg" alt="ONDC" class="ondc-logo-img" height="34" />' +
+    '<img src="/static-qr-experience/public/images/ondc-logo.svg" alt="ONDC" class="ondc-logo-img" height="34" />' +
     "</a>" +
     '<span class="ondc-navbar-product">Discover Experiences</span>' +
     "</div>" +
@@ -94,8 +94,8 @@
       "</div>";
   }
 
-  // Renders a plain list of links (cities, or entities within a city) —
-  // shared by the city picker and the entity picker.
+  // Renders a plain list of links (groups, or entities within a group) —
+  // shared by the group picker and the entity picker.
   function renderLinkList(container, items, hrefFor) {
     container.innerHTML =
       '<ul class="seller-list">' +
@@ -187,16 +187,16 @@
     if (logoEl) logoEl.innerHTML = LOCATION_ICON;
 
     var body = document.body;
-    var citySlug = body.getAttribute("data-city");
+    var groupSlug = body.getAttribute("data-group");
     var entitySlug = body.getAttribute("data-entity");
     var container = document.getElementById("main-content");
     var titleEl = document.getElementById("page-title");
 
     dataPromise
       .then(function (data) {
-        if (citySlug && entitySlug) {
-          var city = findBySlug(data.cities, citySlug);
-          var entity = city && findBySlug(city.entities, entitySlug);
+        if (groupSlug && entitySlug) {
+          var group = findBySlug(data.groups, groupSlug);
+          var entity = group && findBySlug(group.entities, entitySlug);
           if (!entity)
             return renderStatus(
               container,
@@ -204,29 +204,29 @@
               "This experience could not be found."
             );
 
-          var fullName = entity.name + ", " + city.name;
+          var fullName = entity.name + ", " + group.name;
           if (titleEl) titleEl.textContent = entity.title || fullName;
           document.title = "Book Tickets — " + fullName + " | ONDC";
           applyHeaderLogo(entity.photo, fullName);
           renderBuyerList(container, entity, fullName);
-        } else if (citySlug) {
-          var cityOnly = findBySlug(data.cities, citySlug);
-          if (!cityOnly)
+        } else if (groupSlug) {
+          var groupOnly = findBySlug(data.groups, groupSlug);
+          if (!groupOnly)
             return renderStatus(
               container,
               "Not found",
-              "This city could not be found."
+              "This group could not be found."
             );
 
-          if (titleEl) titleEl.textContent = cityOnly.name;
+          if (titleEl) titleEl.textContent = groupOnly.name;
           document.title =
-            "Discover Experiences — " + cityOnly.name + " | ONDC";
-          renderLinkList(container, cityOnly.entities, function (entity) {
-            return "/" + cityOnly.slug + "/" + entity.slug + "/";
+            "Discover Experiences — " + groupOnly.name + " | ONDC";
+          renderLinkList(container, groupOnly.entities, function (entity) {
+            return "/" + groupOnly.slug + "/" + entity.slug + "/";
           });
         } else {
-          renderLinkList(container, data.cities, function (city) {
-            return "/" + city.slug + "/";
+          renderLinkList(container, data.groups, function (group) {
+            return "/" + group.slug + "/";
           });
         }
       })

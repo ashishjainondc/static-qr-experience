@@ -6,33 +6,36 @@
     <meta name="theme-color" content="#1c75bc" />
     <meta
       name="description"
-      content="Discover ONDC buyer apps for top experiences and attractions in Mumbai."
+      content="Discover {{ORG_NAME}} buyer apps for top experiences and attractions in {{GROUP_NAME}}."
     />
-    <meta property="og:title" content="Discover Experiences — Mumbai | ONDC" />
+    <meta
+      property="og:title"
+      content="{{PRODUCT_NAME}} — {{GROUP_NAME}} | {{ORG_NAME}}"
+    />
     <meta
       property="og:description"
-      content="Discover ONDC buyer apps for top experiences and attractions in Mumbai."
+      content="Discover {{ORG_NAME}} buyer apps for top experiences and attractions in {{GROUP_NAME}}."
     />
     <meta property="og:type" content="website" />
-    <link rel="icon" type="image/png" href="/static-qr-experience/public/assets/favicon.png" />
+    <link rel="icon" type="image/png" href="{{BASE_PATH}}/public/images/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     />
-    <link rel="stylesheet" href="/static-qr-experience/public/picker.css" />
-    <title>Discover Experiences — Mumbai | ONDC</title>
+    <link rel="stylesheet" href="{{BASE_PATH}}/public/css/picker.css" />
+    <title>{{PRODUCT_NAME}} — {{GROUP_NAME}} | {{ORG_NAME}}</title>
 
     <!-- Google tag (gtag.js) -->
     <script
       async
-      src="https://www.googletagmanager.com/gtag/js?id=G-X9LS4KMKBC"
+      src="https://www.googletagmanager.com/gtag/js?id={{GA_ID}}"
     ></script>
-    <script src="/static-qr-experience/public/app.js" defer></script>
+    <script src="{{BASE_PATH}}/public/js/app.js" defer></script>
   </head>
 
-  <body data-city="mumbai">
+  <body data-group="{{GROUP_SLUG}}">
     <div class="app-root">
       <div id="navbar-slot"></div>
 
@@ -41,15 +44,15 @@
         <div class="header-hero">
           <div class="header-logo" id="header-logo"></div>
           <div class="header-text">
-            <h1 class="header-title" id="page-title">Mumbai Experiences</h1>
+            <h1 class="header-title" id="page-title">{{GROUP_NAME}} Experiences</h1>
             <p class="header-subtitle">
-              Choose an attraction to see authorised ONDC buyer apps
+              Choose an attraction to see authorised {{ORG_NAME}} buyer apps
             </p>
           </div>
         </div>
       </header>
 
-      <!-- Dynamic content, rendered from data/entities.json by public/app.js -->
+      <!-- Dynamic content, rendered from data/entities.json by public/js/app.js -->
       <main class="app-content" id="main-content">
         <div class="status-wrap">
           <p class="status-body">Loading experiences…</p>

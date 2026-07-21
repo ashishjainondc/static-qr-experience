@@ -1,29 +1,19 @@
 #!/usr/bin/env node
-/**
- * Generate static HTML shells from data/entities.json into public/.
- * Generic — copy scripts/ to any project; configure via data/entities.json only.
- */
+// Generate static HTML pages from data/entities.json into public/.
+// Generic — copy scripts/ (this file + templates/) to any project; the only
+// thing that changes per project is data/entities.json.
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  resolveSite,
-  rootTemplateVars,
-  cityTemplateVars,
-  entityTemplateVars,
-} from "./site-config.mjs";
 
-// a
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const PUBLIC_DIR = path.join(ROOT, "public");
 const DATA_PATH = path.join(ROOT, "data", "entities.json");
-const IMAGES_DIR = path.join(PUBLIC_DIR, "assets", "images");
 const TEMPLATES_DIR = path.join(__dirname, "templates");
-const STATIC_DIR = path.join(__dirname, "static");
 
 const VALID_STATUSES = new Set(["live", "pending", "na"]);
-const RESERVED_PUBLIC = new Set(["assets", "data"]);
+const RESERVED_PUBLIC_DIRS = new Set(["images", "js", "css"]);
 
 function die(message) {
   console.error("generate: " + message);
@@ -44,17 +34,21 @@ function readTemplate(name) {
   return fs.readFileSync(filePath, "utf8");
 }
 
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[c]);
+}
+
 function fill(template, vars) {
   return template.replace(/\{\{([A-Z0-9_]+)\}\}/g, (_, key) => {
     if (!(key in vars)) die("template missing value for {{" + key + "}}");
-    return String(vars[key]);
+    return escapeHtml(vars[key]);
   });
-}
-
-function imageExists(filename) {
-  if (!filename) return true;
-  if (/^https?:\/\//i.test(filename) || filename.startsWith("/")) return true;
-  return fs.existsSync(path.join(IMAGES_DIR, filename));
 }
 
 function isValidHttpsUrl(url) {
@@ -65,64 +59,59 @@ function isValidHttpsUrl(url) {
   }
 }
 
+// Resolves an image reference (as used in data/entities.json) to a local
+// path under the repo, so we can check the file actually exists. External
+// (http/https) URLs are left unchecked.
+function localAssetPath(basePath, ref) {
+  if (!ref || /^https?:\/\//i.test(ref)) return null;
+  const decoded = decodeURIComponent(ref);
+  const relative = decoded.startsWith(basePath + "/")
+    ? decoded.slice(basePath.length + 1)
+    : decoded.replace(/^\//, "");
+  return path.join(ROOT, relative);
+}
+
 function validate(data) {
   const errors = [];
 
-  if (!data || typeof data !== "object") {
-    die("entities.json must be an object");
-  }
+  if (!data || typeof data !== "object") die("entities.json must be an object");
 
   const site = data.site || {};
+  if (!site.basePath) errors.push("site.basePath is required");
   if (!site.gaId) errors.push("site.gaId is required");
   if (!site.productName) errors.push("site.productName is required");
-  if (site.org?.url && !isValidHttpsUrl(site.org.url)) {
-    errors.push("site.org.url must be an https URL");
+  if (!site.orgName) errors.push("site.orgName is required");
+
+  if (!Array.isArray(data.groups) || data.groups.length === 0) {
+    errors.push("groups must be a non-empty array");
   }
 
-  const catalog = data.buyers || {};
-  if (typeof catalog !== "object" || Array.isArray(catalog)) {
-    errors.push("buyers must be an object catalog");
-  } else {
-    for (const [id, meta] of Object.entries(catalog)) {
-      if (!meta || !meta.label)
-        errors.push("buyers." + id + ".label is required");
-      if (meta.logo && !imageExists(meta.logo)) {
-        errors.push("buyers." + id + ".logo file missing: " + meta.logo);
-      }
-    }
-  }
+  const groupSlugs = new Set();
+  for (const group of data.groups || []) {
+    if (!group.slug) errors.push("group missing slug");
+    else if (groupSlugs.has(group.slug)) errors.push("duplicate group slug: " + group.slug);
+    else if (RESERVED_PUBLIC_DIRS.has(group.slug)) {
+      errors.push("group slug conflicts with reserved public/ folder: " + group.slug);
+    } else groupSlugs.add(group.slug);
 
-  if (!Array.isArray(data.cities) || data.cities.length === 0) {
-    errors.push("cities must be a non-empty array");
-  }
-
-  const citySlugs = new Set();
-  for (const city of data.cities || []) {
-    if (!city.slug) errors.push("city missing slug");
-    else if (citySlugs.has(city.slug))
-      errors.push("duplicate city slug: " + city.slug);
-    else if (RESERVED_PUBLIC.has(city.slug)) {
-      errors.push(
-        "city slug conflicts with reserved public/ folder: " + city.slug
-      );
-    } else citySlugs.add(city.slug);
-
-    if (!city.name) errors.push("city " + (city.slug || "?") + " missing name");
-    if (!Array.isArray(city.entities)) {
-      errors.push("city " + (city.slug || "?") + " entities must be an array");
+    if (!group.name) errors.push("group " + (group.slug || "?") + " missing name");
+    if (!Array.isArray(group.entities)) {
+      errors.push("group " + (group.slug || "?") + " entities must be an array");
       continue;
     }
 
     const entitySlugs = new Set();
-    for (const entity of city.entities) {
-      const label = (city.slug || "?") + "/" + (entity.slug || "?");
-      if (!entity.slug) errors.push("entity missing slug under " + city.slug);
-      else if (entitySlugs.has(entity.slug)) {
-        errors.push("duplicate entity slug: " + label);
-      } else entitySlugs.add(entity.slug);
+    for (const entity of group.entities) {
+      const label = (group.slug || "?") + "/" + (entity.slug || "?");
+      if (!entity.slug) errors.push("entity missing slug under " + group.slug);
+      else if (entitySlugs.has(entity.slug)) errors.push("duplicate entity slug: " + label);
+      else entitySlugs.add(entity.slug);
 
       if (!entity.name) errors.push("entity " + label + " missing name");
-      if (entity.photo && !imageExists(entity.photo)) {
+      if (!entity.title) errors.push("entity " + label + " missing title");
+
+      const photoPath = localAssetPath(site.basePath, entity.photo);
+      if (photoPath && !fs.existsSync(photoPath)) {
         errors.push("entity " + label + " photo missing: " + entity.photo);
       }
 
@@ -132,40 +121,18 @@ function validate(data) {
       }
 
       for (const buyer of entity.buyers) {
-        if (!buyer.id) errors.push("buyer missing id under " + label);
-        else if (!catalog[buyer.id]) {
-          errors.push("unknown buyer id '" + buyer.id + "' under " + label);
-        }
+        if (!buyer.label) errors.push("buyer missing label under " + label);
         if (!VALID_STATUSES.has(buyer.status)) {
-          errors.push(
-            "invalid status '" +
-              buyer.status +
-              "' under " +
-              label +
-              " (" +
-              buyer.id +
-              ")"
-          );
+          errors.push("invalid status '" + buyer.status + "' under " + label + " (" + buyer.label + ")");
         }
         if (buyer.status === "live" && !buyer.url) {
-          errors.push(
-            "live buyer '" + buyer.id + "' under " + label + " needs url"
-          );
+          errors.push("live buyer '" + buyer.label + "' under " + label + " needs url");
         }
-        if (
-          buyer.status === "live" &&
-          buyer.url &&
-          !isValidHttpsUrl(buyer.url)
-        ) {
-          errors.push(
-            "live buyer '" +
-              buyer.id +
-              "' under " +
-              label +
-              " needs an https url"
-          );
+        if (buyer.status === "live" && buyer.url && !isValidHttpsUrl(buyer.url)) {
+          errors.push("live buyer '" + buyer.label + "' under " + label + " needs an https url");
         }
-        if (buyer.logo && !imageExists(buyer.logo)) {
+        const logoPath = localAssetPath(site.basePath, buyer.logo);
+        if (logoPath && !fs.existsSync(logoPath)) {
           errors.push("buyer logo missing under " + label + ": " + buyer.logo);
         }
       }
@@ -183,125 +150,84 @@ function writeFile(filePath, contents) {
   fs.writeFileSync(filePath, contents, "utf8");
 }
 
-function copyDir(src, dest) {
-  if (!fs.existsSync(src)) return;
-  fs.mkdirSync(dest, { recursive: true });
-  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
-    const from = path.join(src, entry.name);
-    const to = path.join(dest, entry.name);
-    if (entry.isDirectory()) copyDir(from, to);
-    else fs.copyFileSync(from, to);
-  }
-}
-
-function syncStaticAssets() {
-  copyDir(path.join(STATIC_DIR, "js"), path.join(PUBLIC_DIR, "assets", "js"));
-  copyDir(path.join(STATIC_DIR, "css"), path.join(PUBLIC_DIR, "assets", "css"));
-  console.log("synced scripts/static → public/assets/");
-}
-
-function removeLegacyRootCityFolders(data) {
-  const citySlugs = new Set((data.cities || []).map((city) => city.slug));
-  for (const entry of fs.readdirSync(ROOT, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
-    if (!citySlugs.has(entry.name)) continue;
-    fs.rmSync(path.join(ROOT, entry.name), { recursive: true, force: true });
-    console.log("removed legacy root folder: " + entry.name + "/");
-  }
-  const legacyIndex = path.join(ROOT, "index.html");
-  if (fs.existsSync(legacyIndex)) {
-    fs.unlinkSync(legacyIndex);
-    console.log("removed legacy root index.html");
-  }
-}
-
 function removeStale(data) {
-  const expectedCities = new Set(data.cities.map((c) => c.slug));
-  const expectedEntities = new Map();
-  for (const city of data.cities) {
-    expectedEntities.set(
-      city.slug,
-      new Set((city.entities || []).map((e) => e.slug))
-    );
-  }
+  if (!fs.existsSync(PUBLIC_DIR)) return;
+
+  const expectedGroups = new Set(data.groups.map((g) => g.slug));
+  const expectedEntities = new Map(
+    data.groups.map((g) => [g.slug, new Set((g.entities || []).map((e) => e.slug))])
+  );
 
   for (const entry of fs.readdirSync(PUBLIC_DIR, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
-    if (RESERVED_PUBLIC.has(entry.name) || entry.name.startsWith(".")) continue;
+    if (RESERVED_PUBLIC_DIRS.has(entry.name)) continue;
 
-    const cityDir = path.join(PUBLIC_DIR, entry.name);
-    if (!expectedCities.has(entry.name)) {
-      fs.rmSync(cityDir, { recursive: true, force: true });
-      console.log("removed stale city folder: public/" + entry.name + "/");
+    const groupDir = path.join(PUBLIC_DIR, entry.name);
+    if (!expectedGroups.has(entry.name)) {
+      fs.rmSync(groupDir, { recursive: true, force: true });
+      console.log("removed stale group folder: public/" + entry.name + "/");
       continue;
     }
 
     const keep = expectedEntities.get(entry.name) || new Set();
-    for (const child of fs.readdirSync(cityDir, { withFileTypes: true })) {
+    for (const child of fs.readdirSync(groupDir, { withFileTypes: true })) {
       if (!child.isDirectory()) continue;
       if (!keep.has(child.name)) {
-        fs.rmSync(path.join(cityDir, child.name), {
-          recursive: true,
-          force: true,
-        });
-        console.log(
-          "removed stale entity folder: public/" +
-            entry.name +
-            "/" +
-            child.name +
-            "/"
-        );
+        fs.rmSync(path.join(groupDir, child.name), { recursive: true, force: true });
+        console.log("removed stale entity folder: public/" + entry.name + "/" + child.name + "/");
       }
     }
   }
 }
 
-function removePublicCname() {
-  const publicCname = path.join(PUBLIC_DIR, "CNAME");
-  if (fs.existsSync(publicCname)) {
-    fs.unlinkSync(publicCname);
-    console.log(
-      "removed public/CNAME (custom domain uses root CNAME + GitHub Pages settings)"
-    );
-  }
+function templateVars(site) {
+  return {
+    BASE_PATH: site.basePath,
+    GA_ID: site.gaId,
+    PRODUCT_NAME: site.productName,
+    ORG_NAME: site.orgName,
+  };
 }
 
 function generate(data) {
-  const site = resolveSite(data.site);
+  const site = data.site;
   const rootTpl = readTemplate("root.html");
-  const cityTpl = readTemplate("city.html");
+  const groupTpl = readTemplate("group.html");
   const entityTpl = readTemplate("entity.html");
 
-  writeFile(
-    path.join(PUBLIC_DIR, "index.html"),
-    fill(rootTpl, rootTemplateVars(site))
-  );
+  writeFile(path.join(PUBLIC_DIR, "index.html"), fill(rootTpl, templateVars(site)));
   console.log("wrote public/index.html");
 
-  for (const city of data.cities) {
+  for (const group of data.groups) {
     writeFile(
-      path.join(PUBLIC_DIR, city.slug, "index.html"),
-      fill(cityTpl, cityTemplateVars(site, city))
+      path.join(PUBLIC_DIR, group.slug, "index.html"),
+      fill(groupTpl, {
+        ...templateVars(site),
+        GROUP_NAME: group.name,
+        GROUP_SLUG: group.slug,
+      })
     );
-    console.log("wrote public/" + city.slug + "/index.html");
+    console.log("wrote public/" + group.slug + "/index.html");
 
-    for (const entity of city.entities || []) {
+    for (const entity of group.entities || []) {
       writeFile(
-        path.join(PUBLIC_DIR, city.slug, entity.slug, "index.html"),
-        fill(entityTpl, entityTemplateVars(site, city, entity))
+        path.join(PUBLIC_DIR, group.slug, entity.slug, "index.html"),
+        fill(entityTpl, {
+          ...templateVars(site),
+          GROUP_NAME: group.name,
+          GROUP_SLUG: group.slug,
+          ENTITY_NAME: entity.name,
+          ENTITY_SLUG: entity.slug,
+          ENTITY_TITLE: entity.title,
+        })
       );
-      console.log(
-        "wrote public/" + city.slug + "/" + entity.slug + "/index.html"
-      );
+      console.log("wrote public/" + group.slug + "/" + entity.slug + "/index.html");
     }
   }
 }
 
 const data = readJson(DATA_PATH);
 validate(data);
-removeLegacyRootCityFolders(data);
 removeStale(data);
-removePublicCname();
-syncStaticAssets();
 generate(data);
 console.log("generate: done");
