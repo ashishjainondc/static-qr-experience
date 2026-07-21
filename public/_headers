@@ -13,10 +13,10 @@
 
 # Shared CSS/JS/data: short cache + background revalidation (no filename
 # hashing here, so keep this well short of "immutable")
-/public/*.css
+/assets/css/*
   Cache-Control: public, max-age=300, stale-while-revalidate=3600
 
-/public/app.js
+/assets/js/*
   Cache-Control: public, max-age=300, stale-while-revalidate=3600
 
 /data/entities.json
