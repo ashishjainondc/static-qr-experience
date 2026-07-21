@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var DATA_URL = "/data/entities.json";
+  var DATA_URL = "/static-qr-experience/data/entities.json";
   var GA_ID = "G-X9LS4KMKBC";
 
   var LOCATION_ICON =

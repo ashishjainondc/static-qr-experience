@@ -1,23 +1,28 @@
-/*
-  # Security headers for all responses
-  X-Frame-Options: DENY
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: geolocation=(), microphone=(), camera=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com; img-src 'self' data: https:; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com
-  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+/\*
+
+# Security headers for all responses
+
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+Content-Security-Policy: default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com; img-src 'self' data: https:; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com
+Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
 
 # HTML: no cache (always fetch latest shell)
-/*.html
-  Cache-Control: public, max-age=0, must-revalidate
+
+/\*.html
+Cache-Control: public, max-age=0, must-revalidate
 
 # Shared CSS/JS/data: short cache + background revalidation (no filename
+
 # hashing here, so keep this well short of "immutable")
-/static-qr-experience/public/*.css
-  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+
+/static-qr-experience/public/\*.css
+Cache-Control: public, max-age=300, stale-while-revalidate=3600
 
 /static-qr-experience/public/app.js
-  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+Cache-Control: public, max-age=300, stale-while-revalidate=3600
 
-/data/entities.json
-  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/static-qr-experience/data/entities.json
+Cache-Control: public, max-age=300, stale-while-revalidate=3600
