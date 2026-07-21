@@ -13,6 +13,7 @@ import {
   entityTemplateVars,
 } from "./site-config.mjs";
 
+// a
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const PUBLIC_DIR = path.join(ROOT, "public");
@@ -83,7 +84,8 @@ function validate(data) {
     errors.push("buyers must be an object catalog");
   } else {
     for (const [id, meta] of Object.entries(catalog)) {
-      if (!meta || !meta.label) errors.push("buyers." + id + ".label is required");
+      if (!meta || !meta.label)
+        errors.push("buyers." + id + ".label is required");
       if (meta.logo && !imageExists(meta.logo)) {
         errors.push("buyers." + id + ".logo file missing: " + meta.logo);
       }
@@ -97,9 +99,12 @@ function validate(data) {
   const citySlugs = new Set();
   for (const city of data.cities || []) {
     if (!city.slug) errors.push("city missing slug");
-    else if (citySlugs.has(city.slug)) errors.push("duplicate city slug: " + city.slug);
+    else if (citySlugs.has(city.slug))
+      errors.push("duplicate city slug: " + city.slug);
     else if (RESERVED_PUBLIC.has(city.slug)) {
-      errors.push("city slug conflicts with reserved public/ folder: " + city.slug);
+      errors.push(
+        "city slug conflicts with reserved public/ folder: " + city.slug
+      );
     } else citySlugs.add(city.slug);
 
     if (!city.name) errors.push("city " + (city.slug || "?") + " missing name");
@@ -133,15 +138,31 @@ function validate(data) {
         }
         if (!VALID_STATUSES.has(buyer.status)) {
           errors.push(
-            "invalid status '" + buyer.status + "' under " + label + " (" + buyer.id + ")"
+            "invalid status '" +
+              buyer.status +
+              "' under " +
+              label +
+              " (" +
+              buyer.id +
+              ")"
           );
         }
         if (buyer.status === "live" && !buyer.url) {
-          errors.push("live buyer '" + buyer.id + "' under " + label + " needs url");
-        }
-        if (buyer.status === "live" && buyer.url && !isValidHttpsUrl(buyer.url)) {
           errors.push(
-            "live buyer '" + buyer.id + "' under " + label + " needs an https url"
+            "live buyer '" + buyer.id + "' under " + label + " needs url"
+          );
+        }
+        if (
+          buyer.status === "live" &&
+          buyer.url &&
+          !isValidHttpsUrl(buyer.url)
+        ) {
+          errors.push(
+            "live buyer '" +
+              buyer.id +
+              "' under " +
+              label +
+              " needs an https url"
           );
         }
         if (buyer.logo && !imageExists(buyer.logo)) {
@@ -219,9 +240,16 @@ function removeStale(data) {
     for (const child of fs.readdirSync(cityDir, { withFileTypes: true })) {
       if (!child.isDirectory()) continue;
       if (!keep.has(child.name)) {
-        fs.rmSync(path.join(cityDir, child.name), { recursive: true, force: true });
+        fs.rmSync(path.join(cityDir, child.name), {
+          recursive: true,
+          force: true,
+        });
         console.log(
-          "removed stale entity folder: public/" + entry.name + "/" + child.name + "/"
+          "removed stale entity folder: public/" +
+            entry.name +
+            "/" +
+            child.name +
+            "/"
         );
       }
     }
@@ -232,7 +260,9 @@ function removePublicCname() {
   const publicCname = path.join(PUBLIC_DIR, "CNAME");
   if (fs.existsSync(publicCname)) {
     fs.unlinkSync(publicCname);
-    console.log("removed public/CNAME (custom domain uses root CNAME + GitHub Pages settings)");
+    console.log(
+      "removed public/CNAME (custom domain uses root CNAME + GitHub Pages settings)"
+    );
   }
 }
 
