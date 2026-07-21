@@ -29,7 +29,7 @@ npm-debug.log*
 # Dependencies (if tooling is added later)
 node_modules/
 
-# Build output
+# Build output (if a build step is added later)
 dist/
 build/
 public/assets/js/

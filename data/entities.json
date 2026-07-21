@@ -1,49 +1,4 @@
 {
-  "site": {
-    "productName": "Discover Experiences",
-    "brandName": "ONDC",
-    "gaId": "G-X9LS4KMKBC",
-    "themeColor": "#1c75bc",
-    "org": {
-      "name": "ONDC",
-      "url": "https://ondc.org",
-      "logo": "ondc-logo.svg",
-      "ariaLabel": "ONDC – Open Network for Digital Commerce"
-    },
-    "footerText": "Powered by ONDC",
-    "copy": {
-      "rootDescription": "Discover ONDC buyer apps for top experiences and attractions near you.",
-      "rootTitle": "Select Your City",
-      "rootSubtitle": "Choose a city to discover experiences and attractions near you",
-      "cityDescription": "Discover ONDC buyer apps for top experiences and attractions in {city}.",
-      "citySubtitle": "Choose an attraction to see authorised ONDC buyer apps",
-      "entityPageTitle": "Book Tickets — {entity}, {city} | {brand}",
-      "entityDescription": "Book {entity}, {city} tickets from an authorised ONDC buyer app.",
-      "entitySubtitle": "Beat the queue, entry tickets in a jiffy",
-      "entityTitleDefault": "Get {name} tickets via {brand}",
-      "loadingRoot": "Loading cities…",
-      "loadingCity": "Loading experiences…",
-      "loadingEntity": "Loading buyers…"
-    }
-  },
-  "buyers": {
-    "oneticket": {
-      "label": "Oneticket",
-      "logo": "oneticket-logo.jpg"
-    },
-    "highway-delite": {
-      "label": "Highway Delite",
-      "logo": "highway-delite.png"
-    },
-    "staybook": {
-      "label": "Staybook",
-      "logo": "staybook-logo.png"
-    },
-    "bino": {
-      "label": "Bino",
-      "logo": "bino.jpg"
-    }
-  },
   "cities": [
     {
       "slug": "mumbai",
@@ -52,26 +7,32 @@
         {
           "slug": "nehru-science-centre-mumbai",
           "name": "Nehru Science Centre",
-          "photo": "nehru-science-centre.jpg",
+          "title": "Get Nehru Science Centre Tickets via ONDC",
+          "photo": "/public/assets/buyers/Nehru%20science%20center%20logo.jpg",
           "buyers": [
             {
-              "id": "oneticket",
+              "label": "Oneticket",
               "status": "live",
+              "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
               "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019ebb57-e18e-7618-b38c-a1f7cfad76ce"
             },
             {
-              "id": "highway-delite",
+              "label": "Highway Delite",
               "status": "live",
+              "logo": "/public/assets/buyers/highway-delite.png",
               "url": "https://experiences.highwaydelite.com/mumbai/culture-and-heritage/nehru-science-centre-mumbai"
             },
             {
-              "id": "staybook",
+              "label": "Staybook",
               "status": "live",
+              "logo": "/public/assets/buyers/staybook-logo.png",
               "url": "https://staybook.in/activities/nehru-science-centre-mumbai"
             },
+
             {
-              "id": "bino",
+              "label": "Bino",
               "status": "live",
+              "logo": "/public/assets/buyers/bino.jpg",
               "url": "https://b.bino.bot/q/rz-nehru"
             }
           ]
@@ -85,26 +46,31 @@
         {
           "slug": "visvesvaraya-industrial-technological-museum-bangalore",
           "name": "Visvesvaraya Industrial and Technological Museum",
-          "photo": "visvesvaraya-industrial-technological-museum.jpg",
+          "title": "Get Visvesvaraya Industrial and Technological Museum tickets via ONDC",
+          "photo": "/public/assets/buyers/Visvesvaraya%20Industrial%20and%20technological%20museum%20logo.jpg",
           "buyers": [
             {
-              "id": "oneticket",
+              "label": "Oneticket",
               "status": "live",
+              "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
               "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019e96f1-e59a-7801-b3d9-76885eb546a2"
             },
             {
-              "id": "highway-delite",
+              "label": "Highway Delite",
               "status": "live",
+              "logo": "/public/assets/buyers/highway-delite.png",
               "url": "https://experiences.highwaydelite.com/bangalore/culture-and-heritage/visvesvaraya-industrial-technological-museum-bangalore"
             },
             {
-              "id": "staybook",
+              "label": "Staybook",
               "status": "live",
+              "logo": "/public/assets/buyers/staybook-logo.png",
               "url": "https://staybook.in/activities/visvesvaraya-industrial-museum-bangalore"
             },
             {
-              "id": "bino",
+              "label": "Bino",
               "status": "live",
+              "logo": "/public/assets/buyers/bino.jpg",
               "url": "https://b.bino.bot/q/rz-vitm"
             }
           ]
@@ -118,21 +84,25 @@
         {
           "slug": "birla-industrial-and-technological-museum-kolkata",
           "name": "Birla Industrial & Technological Museum",
-          "photo": "birla-industrial-technological-museum.png",
+          "title": "Get Birla Industrial & Technological Museum tickets via ONDC",
+          "photo": "/public/assets/buyers/birla%20industrial%20and%20technological%20museum%20logo.png",
           "buyers": [
             {
-              "id": "oneticket",
+              "label": "Oneticket",
               "status": "live",
+              "logo": "/public/assets/buyers/Oneticket%20logo.jpg",
               "url": "https://ondc-prod-eventpass.sequelstring.com/oneticket/oneticket/express-booking?bpp_id=ondc.highwaydelite.com&parent_id=019da9fc-fc1e-7bf7-a501-e3efaf76d70d"
             },
             {
-              "id": "highway-delite",
+              "label": "Highway Delite",
               "status": "live",
+              "logo": "/public/assets/buyers/highway-delite.png",
               "url": "https://experiences.highwaydelite.com/kolkata/culture-and-heritage/birla-industrial-and-technological-museum"
             },
             {
-              "id": "bino",
+              "label": "Bino",
               "status": "live",
+              "logo": "/public/assets/buyers/bino.jpg",
               "url": "https://b.bino.bot/q/rz-bitm"
             }
           ]
@@ -146,21 +116,25 @@
         {
           "slug": "national-gallery-of-modern-art-delhi",
           "name": "National Gallery of Modern Art",
-          "photo": "national-gallery-of-modern-art.png",
+          "title": "Get National Gallery of Modern Art tickets via ONDC",
+          "photo": "/public/assets/buyers/National%20Gallery%20Of%20Modern%20Art%20logo.png",
           "buyers": [
             {
-              "id": "highway-delite",
+              "label": "Highway Delite",
               "status": "live",
+              "logo": "/public/assets/buyers/highway-delite.png",
               "url": "https://experiences.highwaydelite.com/new-delhi/culture-and-heritage/national-gallery-of-modern-art"
             },
             {
-              "id": "staybook",
+              "label": "Staybook",
               "status": "live",
+              "logo": "/public/assets/buyers/staybook-logo.png",
               "url": "https://staybook.in/activities/national-gallery-of-modern-art-delhi"
             },
             {
-              "id": "bino",
+              "label": "Bino",
               "status": "live",
+              "logo": "/public/assets/buyers/bino.jpg",
               "url": "https://b.bino.bot/q/rz-ngma-delhi"
             }
           ]
