@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Tickets — Nehru Science Centre, Mumbai | ONDC</title>
+    <meta
+      name="description"
+      content="Book Nehru Science Centre, Mumbai tickets from an authorised ONDC buyer app."
+    />
+    <link rel="icon" type="image/png" href="/public/assets/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/public/entity.css" />
+
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-X9LS4KMKBC"
+    ></script>
+    <script src="/public/app.js" defer></script>
+  </head>
+
+  <body data-city="mumbai" data-entity="nehru-science-centre-mumbai">
+    <div class="app-root">
+      <div id="navbar-slot"></div>
+
+      <!-- Hero header -->
+      <header class="header">
+        <div class="header-hero">
+          <div class="header-logo" id="header-logo"></div>
+          <div class="header-text">
+            <h1 class="header-title" id="page-title">
+              Get Nehru Science Centre Tickets via ONDC
+            </h1>
+            <p class="header-subtitle">
+              Beat the queue, entry tickets in a jiffy
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dynamic content, rendered from data/entities.json by public/app.js -->
+      <main class="app-content" id="main-content">
+        <div class="status-wrap">
+          <p class="status-body">Loading buyer apps…</p>
+        </div>
+      </main>
+
+      <div id="footer-slot"></div>
+    </div>
+  </body>
+</html>
