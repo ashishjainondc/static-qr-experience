@@ -11,23 +11,24 @@ Live at [experience.ondc.tech](https://experience.ondc.tech).
 The site has three levels, each a thin static HTML shell rendered by one
 shared script. This repo is deployed as a GitHub Pages *project* site, so
 every real URL is prefixed with the repo name (`site.basePath` in
-`data/entities.json`, currently `/static-qr-experience`) — and because
-generated pages live under `public/` (see below), every page URL also has a
-`/public/` segment:
+`data/entities.json`, currently `/static-qr-experience`):
 
 ```
-{basePath}/public/                                  → pick a group (e.g. a city)
-{basePath}/public/<group>/                          → pick an experience in that group
-{basePath}/public/<group>/<experience>/              → pick a buyer app to book with
+{basePath}/                                  → pick a group (e.g. a city)
+{basePath}/<group>/                          → pick an experience in that group
+{basePath}/<group>/<experience>/              → pick a buyer app to book with
 ```
 
 For example:
 
 ```
-/static-qr-experience/public/mumbai/
-/static-qr-experience/public/mumbai/nehru-science-centre-mumbai/
+/static-qr-experience/mumbai/
+/static-qr-experience/mumbai/nehru-science-centre-mumbai/
 ```
 
+Generated pages live at the **repo root** (not under `public/`) so that the
+bare `{basePath}/` URL itself resolves — `public/` holds only the shared,
+non-generated assets (`public/js/`, `public/css/`, `public/images/`).
 `public/js/app.js` hardcodes this same `BASE_PATH` (alongside `DATA_URL`/
 `GA_ID`, see [Reusing this generator](#reusing-this-generator-in-another-project))
 so that the links it generates between pages (city picker → experience
@@ -50,14 +51,14 @@ All of those HTML files, though, are **generated** — see
 folders; you edit `data/entities.json` and run one script.
 
 ```
-public/index.html                                     # group picker (generated)
-public/mumbai/index.html                               # experience picker (generated, data-group="mumbai")
-public/mumbai/nehru-science-centre-mumbai/index.html   # buyer-app list (generated, data-group + data-entity)
-public/bangalore/index.html
-public/bangalore/visvesvaraya-industrial-technological-museum-bangalore/index.html
+index.html                                            # group picker (generated)
+mumbai/index.html                                     # experience picker (generated, data-group="mumbai")
+mumbai/nehru-science-centre-mumbai/index.html          # buyer-app list (generated, data-group + data-entity)
+bangalore/index.html
+bangalore/visvesvaraya-industrial-technological-museum-bangalore/index.html
 
 data/entities.json                                    # single source of truth for all content + site config
-scripts/generate.mjs                                  # reads data/entities.json, writes public/**/index.html
+scripts/generate.mjs                                  # reads data/entities.json, writes index.html + <group>/**/index.html
 .github/workflows/deploy.yml                          # runs the generator and deploys to GitHub Pages on push
 scripts/templates/root.html                           # template for the group picker
 scripts/templates/group.html                          # template for the experience picker
@@ -147,13 +148,13 @@ Add an entry to that entity's `buyers` array and re-run the generator (below)
 ### Adding a new venue to an existing group
 
 Add an entry to that group's `entities` array in `data/entities.json` and
-re-run the generator. It creates `public/<group>/<entity>/index.html` for you.
+re-run the generator. It creates `<group>/<entity>/index.html` for you.
 
 ### Adding a new group
 
 Add an entry to the `groups` array (with at least one entity) in
 `data/entities.json` and re-run the generator. It creates
-`public/<group>/index.html` and every `public/<group>/<entity>/index.html`.
+`<group>/index.html` and every `<group>/<entity>/index.html`.
 
 ## Generating pages
 
@@ -163,11 +164,12 @@ node scripts/generate.mjs
 
 This reads `data/entities.json`, validates it (unique slugs, valid buyer
 `status`, `https` URLs, referenced image files actually existing, etc.), and
-writes every `public/**/index.html` from the templates in
-`scripts/templates/`. It also deletes any previously generated group/entity
-folder under `public/` that's no longer in the JSON, so stale pages never
-linger. `public/index.html` and `public/*/` (aside from `images/`, `js/`,
-`css/`) are git-ignored — they're build output, not source.
+writes `index.html` plus every `<group>/**/index.html` at the repo root from
+the templates in `scripts/templates/`. It also deletes any previously
+generated group/entity folder that's no longer in the JSON, so stale pages
+never linger. The root `index.html` and every top-level group folder are
+git-ignored (aside from the fixed `public/`, `data/`, `scripts/`, `.github/`
+directories) — they're build output, not source.
 
 Run it any time `data/entities.json` changes, before deploying.
 
@@ -196,7 +198,7 @@ cd ..   # parent of this repo checkout, assuming it's named static-qr-experience
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000/static-qr-experience/public/`.
+Then open `http://localhost:8000/static-qr-experience/`.
 
 ## Deployment
 

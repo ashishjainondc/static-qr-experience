@@ -223,11 +223,11 @@
           document.title =
             "Discover Experiences — " + groupOnly.name + " | ONDC";
           renderLinkList(container, groupOnly.entities, function (entity) {
-            return BASE_PATH + "/public/" + groupOnly.slug + "/" + entity.slug + "/";
+            return BASE_PATH + "/" + groupOnly.slug + "/" + entity.slug + "/";
           });
         } else {
           renderLinkList(container, data.groups, function (group) {
-            return BASE_PATH + "/public/" + group.slug + "/";
+            return BASE_PATH + "/" + group.slug + "/";
           });
         }
       })

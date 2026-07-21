@@ -32,9 +32,14 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p _site
-          cp -r data _site/data
-          cp -r public _site/public
-          [ -f CNAME ] && cp CNAME _site/CNAME || true
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='scripts' \
+            --exclude='README.md' \
+            --exclude='.gitignore' \
+            --exclude='_site' \
+            ./ _site/
           touch _site/.nojekyll
 
       - name: Upload artifact

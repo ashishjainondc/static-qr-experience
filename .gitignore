@@ -34,10 +34,11 @@ dist/
 build/
 _site/
 
-# Generated HTML (from scripts/generate.mjs) — everything under public/*/
-# is a build-output group/entity folder except the shared asset folders.
-public/index.html
-public/*/
-!public/images/
-!public/js/
-!public/css/
+# Generated HTML (from scripts/generate.mjs) — every top-level directory is
+# a build-output group folder except these fixed project directories.
+/index.html
+/*/
+!/public/
+!/data/
+!/scripts/
+!/.github/

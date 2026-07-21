@@ -1,19 +1,20 @@
 #!/usr/bin/env node
-// Generate static HTML pages from data/entities.json into public/.
+// Generate static HTML pages from data/entities.json into the repo root.
 // Generic — copy scripts/ (this file + templates/) to any project; the only
-// thing that changes per project is data/entities.json..
+// thing that changes per project is data/entities.json.
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const PUBLIC_DIR = path.join(ROOT, "public");
 const DATA_PATH = path.join(ROOT, "data", "entities.json");
 const TEMPLATES_DIR = path.join(__dirname, "templates");
 
 const VALID_STATUSES = new Set(["live", "pending", "na"]);
-const RESERVED_PUBLIC_DIRS = new Set(["images", "js", "css"]);
+// Fixed project directories a group slug must not collide with, and that
+// removeStale() must never touch.
+const RESERVED_ROOT_DIRS = new Set(["public", "data", "scripts", ".github"]);
 
 function die(message) {
   console.error("generate: " + message);
@@ -95,9 +96,9 @@ function validate(data) {
     if (!group.slug) errors.push("group missing slug");
     else if (groupSlugs.has(group.slug))
       errors.push("duplicate group slug: " + group.slug);
-    else if (RESERVED_PUBLIC_DIRS.has(group.slug)) {
+    else if (RESERVED_ROOT_DIRS.has(group.slug)) {
       errors.push(
-        "group slug conflicts with reserved public/ folder: " + group.slug
+        "group slug conflicts with a reserved project folder: " + group.slug
       );
     } else groupSlugs.add(group.slug);
 
@@ -182,8 +183,6 @@ function writeFile(filePath, contents) {
 }
 
 function removeStale(data) {
-  if (!fs.existsSync(PUBLIC_DIR)) return;
-
   const expectedGroups = new Set(data.groups.map((g) => g.slug));
   const expectedEntities = new Map(
     data.groups.map((g) => [
@@ -192,14 +191,15 @@ function removeStale(data) {
     ])
   );
 
-  for (const entry of fs.readdirSync(PUBLIC_DIR, { withFileTypes: true })) {
+  for (const entry of fs.readdirSync(ROOT, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
-    if (RESERVED_PUBLIC_DIRS.has(entry.name)) continue;
+    if (entry.name.startsWith(".")) continue;
+    if (RESERVED_ROOT_DIRS.has(entry.name)) continue;
 
-    const groupDir = path.join(PUBLIC_DIR, entry.name);
+    const groupDir = path.join(ROOT, entry.name);
     if (!expectedGroups.has(entry.name)) {
       fs.rmSync(groupDir, { recursive: true, force: true });
-      console.log("removed stale group folder: public/" + entry.name + "/");
+      console.log("removed stale group folder: " + entry.name + "/");
       continue;
     }
 
@@ -212,11 +212,7 @@ function removeStale(data) {
           force: true,
         });
         console.log(
-          "removed stale entity folder: public/" +
-            entry.name +
-            "/" +
-            child.name +
-            "/"
+          "removed stale entity folder: " + entry.name + "/" + child.name + "/"
         );
       }
     }
@@ -238,26 +234,23 @@ function generate(data) {
   const groupTpl = readTemplate("group.html");
   const entityTpl = readTemplate("entity.html");
 
-  writeFile(
-    path.join(PUBLIC_DIR, "index.html"),
-    fill(rootTpl, templateVars(site))
-  );
-  console.log("wrote public/index.html");
+  writeFile(path.join(ROOT, "index.html"), fill(rootTpl, templateVars(site)));
+  console.log("wrote index.html");
 
   for (const group of data.groups) {
     writeFile(
-      path.join(PUBLIC_DIR, group.slug, "index.html"),
+      path.join(ROOT, group.slug, "index.html"),
       fill(groupTpl, {
         ...templateVars(site),
         GROUP_NAME: group.name,
         GROUP_SLUG: group.slug,
       })
     );
-    console.log("wrote public/" + group.slug + "/index.html");
+    console.log("wrote " + group.slug + "/index.html");
 
     for (const entity of group.entities || []) {
       writeFile(
-        path.join(PUBLIC_DIR, group.slug, entity.slug, "index.html"),
+        path.join(ROOT, group.slug, entity.slug, "index.html"),
         fill(entityTpl, {
           ...templateVars(site),
           GROUP_NAME: group.name,
@@ -267,9 +260,7 @@ function generate(data) {
           ENTITY_TITLE: entity.title,
         })
       );
-      console.log(
-        "wrote public/" + group.slug + "/" + entity.slug + "/index.html"
-      );
+      console.log("wrote " + group.slug + "/" + entity.slug + "/index.html");
     }
   }
 }
