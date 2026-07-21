@@ -1,7 +1,8 @@
 (function () {
   "use strict";
 
-  var DATA_URL = "/static-qr-experience/data/entities.json";
+  var BASE_PATH = "/static-qr-experience";
+  var DATA_URL = BASE_PATH + "/data/entities.json";
   var GA_ID = "G-X9LS4KMKBC";
 
   var LOCATION_ICON =
@@ -222,11 +223,11 @@
           document.title =
             "Discover Experiences — " + groupOnly.name + " | ONDC";
           renderLinkList(container, groupOnly.entities, function (entity) {
-            return "/" + groupOnly.slug + "/" + entity.slug + "/";
+            return BASE_PATH + "/public/" + groupOnly.slug + "/" + entity.slug + "/";
           });
         } else {
           renderLinkList(container, data.groups, function (group) {
-            return "/" + group.slug + "/";
+            return BASE_PATH + "/public/" + group.slug + "/";
           });
         }
       })

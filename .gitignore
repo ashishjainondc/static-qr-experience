@@ -32,6 +32,7 @@ node_modules/
 # Build output (if a build step is added later)
 dist/
 build/
+_site/
 
 # Generated HTML (from scripts/generate.mjs) — everything under public/*/
 # is a build-output group/entity folder except the shared asset folders.

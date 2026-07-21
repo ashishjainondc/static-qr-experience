@@ -9,20 +9,29 @@ Live at [experience.ondc.tech](https://experience.ondc.tech).
 ## How it's structured
 
 The site has three levels, each a thin static HTML shell rendered by one
-shared script:
+shared script. This repo is deployed as a GitHub Pages *project* site, so
+every real URL is prefixed with the repo name (`site.basePath` in
+`data/entities.json`, currently `/static-qr-experience`) — and because
+generated pages live under `public/` (see below), every page URL also has a
+`/public/` segment:
 
 ```
-/                                          → pick a group (e.g. a city)
-/<group>/                                  → pick an experience in that group
-/<group>/<experience>/                     → pick a buyer app to book with
+{basePath}/public/                                  → pick a group (e.g. a city)
+{basePath}/public/<group>/                          → pick an experience in that group
+{basePath}/public/<group>/<experience>/              → pick a buyer app to book with
 ```
 
 For example:
 
 ```
-/mumbai/
-/mumbai/nehru-science-centre-mumbai/
+/static-qr-experience/public/mumbai/
+/static-qr-experience/public/mumbai/nehru-science-centre-mumbai/
 ```
+
+`public/js/app.js` hardcodes this same `BASE_PATH` (alongside `DATA_URL`/
+`GA_ID`, see [Reusing this generator](#reusing-this-generator-in-another-project))
+so that the links it generates between pages (city picker → experience
+picker → buyer-app list) resolve to the right place.
 
 There is no build step for the *runtime* — every page is a plain `.html` file
 that:
@@ -49,6 +58,7 @@ public/bangalore/visvesvaraya-industrial-technological-museum-bangalore/index.ht
 
 data/entities.json                                    # single source of truth for all content + site config
 scripts/generate.mjs                                  # reads data/entities.json, writes public/**/index.html
+.github/workflows/deploy.yml                          # runs the generator and deploys to GitHub Pages on push
 scripts/templates/root.html                           # template for the group picker
 scripts/templates/group.html                          # template for the experience picker
 scripts/templates/entity.html                         # template for the buyer-app list
@@ -169,30 +179,43 @@ The generator is intentionally decoupled from ONDC-specific content — copy
 Everything page-specific (product name, org name, GA ID, base path,
 group/venue copy) comes from that one JSON file; nothing in `scripts/` needs
 editing. The one thing that stays project-specific outside the JSON is
-`public/js/app.js` itself (it hardcodes its own `DATA_URL`/`GA_ID` constants
+`public/js/app.js` itself (it hardcodes its own `BASE_PATH`/`DATA_URL`/`GA_ID`
+constants — `BASE_PATH` must match `site.basePath` in `data/entities.json` —
 and the "ONDC"/"Discover Experiences" copy in the navbar/footer) — update
 those by hand once per project.
 
 ## Local development
 
-No build tooling required — serve the repo root with any static file server:
+Run the generator, then serve from the **parent** of a folder literally named
+to match `site.basePath` (`static-qr-experience` by default), since every page
+links assets/data with that absolute prefix:
 
 ```
+node scripts/generate.mjs
+cd ..   # parent of this repo checkout, assuming it's named static-qr-experience
 python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000/`.
+Then open `http://localhost:8000/static-qr-experience/public/`.
 
 ## Deployment
 
-This is a static site with no build step, deployable to Netlify, Cloudflare
-Pages, GitHub Pages, or any static host serving the repo root:
+Deployed to GitHub Pages via `.github/workflows/deploy.yml`: on every push to
+`main`, it runs `node scripts/generate.mjs` and publishes the result. Generated
+HTML is **never committed** — it's rebuilt fresh on every deploy, so it can't
+drift out of sync with `data/entities.json`.
 
-- `public/_headers` sets security headers (CSP, HSTS, etc.) and cache rules — Netlify/Cloudflare Pages convention.
-- `public/_redirects` — fallback rule, Netlify/Cloudflare Pages convention.
-- `CNAME` — custom domain, GitHub Pages convention.
+This requires the repo's Pages source (Settings → Pages → Build and
+deployment) to be set to **"GitHub Actions"** (a one-time setting, not
+something the workflow file itself can change).
 
-Only wire up the convention matching your actual host; the others are inert.
+- `CNAME` — custom domain, GitHub Pages convention. Copied into the deployed
+  artifact by the workflow.
+
+If you deploy elsewhere (Netlify, Cloudflare Pages, etc.) instead, run
+`node scripts/generate.mjs` as your host's build command and publish the
+repo root (or add `public/_headers`/`public/_redirects` for their
+security-header/redirect conventions).
 
 ## Analytics
 
