@@ -74,12 +74,12 @@ needs to change for day-to-day updates.
         {
           "slug": "nehru-science-centre-mumbai",
           "name": "Nehru Science Centre",
-          "photo": "/public/assets/buyers/Nehru%20science%20center%20logo.jpg",
+          "photo": "/static-qr-experience/public/assets/buyers/Nehru%20science%20center%20logo.jpg",
           "buyers": [
             {
               "label": "Highway Delite",
               "status": "live",
-              "logo": "/public/assets/buyers/highway-delite.png",
+              "logo": "/static-qr-experience/public/assets/buyers/highway-delite.png",
               "url": "https://experiences.highwaydelite.com/..."
             }
           ]

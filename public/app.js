@@ -16,7 +16,7 @@
     '<div class="ondc-navbar-inner">' +
     '<a class="ondc-logo" href="https://ondc.org" target="_blank" rel="noopener noreferrer" ' +
     'aria-label="ONDC – Open Network for Digital Commerce">' +
-    '<img src="/public/ondc-logo.svg" alt="ONDC" class="ondc-logo-img" height="34" />' +
+    '<img src="/static-qr-experience/public/ondc-logo.svg" alt="ONDC" class="ondc-logo-img" height="34" />' +
     "</a>" +
     '<span class="ondc-navbar-product">Discover Experiences</span>' +
     "</div>" +
